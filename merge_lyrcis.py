@@ -28,6 +28,10 @@ def merge_lrc(s: str, ts: str) -> str:
 
     orig = parse_lrc(s)
     trans = parse_lrc(ts)
+
+    # print(orig)
+    # print(trans)
+
     if not orig:
         return ts
 
@@ -36,10 +40,13 @@ def merge_lrc(s: str, ts: str) -> str:
     matched_trans = {}
     for i in reversed(range(len(orig))):  # 从后往前分配翻译
         o_time, _ = orig[i]
+        if(orig[i][1].isspace() or orig[i][1]==""):
+            continue
         if not trans_pool:
             break
         closest_idx = min(range(len(trans_pool)), key=lambda j: abs(trans_pool[j][0] - o_time))
         matched_trans[i] = trans_pool[closest_idx][1]
+        # print(orig[i],trans_pool[closest_idx][1])
         trans_pool.pop(closest_idx)
 
     # 构造三元组：未匹配的翻译用原句代替
